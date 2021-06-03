@@ -6,6 +6,11 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js'],
   },
+  output: {
+    path: path.resolve(__dirname, '..', './build'),
+    filename: 'static/js/[name].[contenthash:8].js',
+    clean: true
+  },
   module: {
     rules: [
       {
@@ -17,16 +22,19 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
     ],
-  },
-  output: {
-    path: path.resolve(__dirname, '..', './build'),
-    filename: 'static/js/[name].[contenthash:8].js',
-    clean: true
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', './public/index.html'),
+      inject: 'body'
     }),
   ],
 }
