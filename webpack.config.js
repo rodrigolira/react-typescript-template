@@ -1,9 +1,82 @@
-const { merge } = require('webpack-merge');
-const commonConfig = require('./webpack/webpack.common');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-module.exports = (envVars) => {
-  const { env } = envVars;
-  const envConfig = require(`./webpack/webpack.${env}.js`);
-  const config = merge(commonConfig, envConfig);
-  return config;
-}
+const PRODUCTION_MODE = 'production';
+const DEVELOPMENT_MODE = 'development';
+
+module.exports = (_, argv) => {
+  const { mode } = argv;
+
+  const isProduction = mode === PRODUCTION_MODE;
+  const isDevelopment = !isProduction;
+
+  process.env.NODE_ENV = isProduction ? PRODUCTION_MODE : DEVELOPMENT_MODE;
+  process.env.BABEL_ENV = isProduction ? PRODUCTION_MODE : DEVELOPMENT_MODE;
+
+  return {
+    entry: path.resolve(__dirname, './src/index.tsx'),
+    resolve: {
+      extensions: ['.tsx', '.ts', '.jsx', '.js'],
+    },
+    output: {
+      path: path.resolve(__dirname, './build'),
+      filename: isProduction ? 'static/js/[name].[contenthash:8].js' : 'static/js/[name].js',
+      clean: true,
+    },
+    devtool: isProduction ? false : 'cheap-module-source-map',
+    devServer: isProduction
+      ? undefined
+      : {
+          port: 3000,
+          open: false,
+          hot: true,
+          contentBase: path.resolve(__dirname, 'public'),
+        },
+    module: {
+      rules: [
+        {
+          test: /\.(ts|js)x?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+            },
+          ],
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin(
+        Object.assign(
+          {},
+          {
+            template: path.resolve(__dirname, './public/index.html'),
+            inject: 'body',
+          },
+          isProduction
+            ? {
+                minify: {
+                  removeComments: true,
+                  collapseWhitespace: true,
+                  removeRedundantAttributes: true,
+                  useShortDoctype: true,
+                  removeEmptyAttributes: true,
+                  removeStyleLinkTypeAttributes: true,
+                  keepClosingSlash: true,
+                  minifyJS: true,
+                  minifyCSS: true,
+                  minifyURLs: true,
+                },
+              }
+            : undefined
+        )
+      ),
+      isDevelopment && new ReactRefreshWebpackPlugin(),
+    ].filter(Boolean),
+  };
+};
