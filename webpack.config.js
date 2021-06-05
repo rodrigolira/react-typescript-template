@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const PRODUCTION_MODE = 'production';
 const DEVELOPMENT_MODE = 'development';
@@ -46,7 +47,7 @@ module.exports = (_, argv) => {
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'].filter(Boolean),
         },
       ],
     },
@@ -77,6 +78,11 @@ module.exports = (_, argv) => {
         )
       ),
       isDevelopment && new ReactRefreshWebpackPlugin(),
+      isProduction &&
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+        }),
     ].filter(Boolean),
   };
 };
