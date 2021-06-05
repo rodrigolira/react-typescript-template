@@ -23,6 +23,7 @@ module.exports = (_, argv) => {
     output: {
       path: path.resolve(__dirname, './build'),
       filename: isProduction ? 'static/js/[name].[contenthash:8].js' : 'static/js/[name].js',
+      chunkFilename: isProduction ? 'static/js/[name].[contenthash:8].chunk.js' : 'static/js/[name].chunk.js',
       clean: true,
     },
     devtool: isProduction ? false : 'cheap-module-source-map',
@@ -34,6 +35,15 @@ module.exports = (_, argv) => {
           hot: true,
           contentBase: path.resolve(__dirname, 'public'),
         },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        name: isDevelopment,
+      },
+      runtimeChunk: {
+        name: (entrypoint) => `runtime-${entrypoint.name}`,
+      },
+    },
     module: {
       rules: [
         {
