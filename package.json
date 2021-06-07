@@ -54,7 +54,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^5.3.1",
     "husky": "^4.3.8",
-    "inline-chunk-html-plugin": "^1.1.1",
     "lint-staged": "^11.0.0",
     "mini-css-extract-plugin": "^1.6.0",
     "prettier": "^2.3.0",

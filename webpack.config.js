@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var InlineChunkHtmlPlugin = require('inline-chunk-html-plugin');
 
 const PRODUCTION_MODE = 'production';
 const DEVELOPMENT_MODE = 'development';
@@ -34,7 +33,7 @@ module.exports = (_, argv) => {
           port: 3000,
           open: false,
           hot: true,
-          contentBase: path.resolve(__dirname, 'public'),
+          contentBase: path.resolve(__dirname, './public'),
         },
     optimization: {
       splitChunks: {
@@ -99,7 +98,6 @@ module.exports = (_, argv) => {
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
         }),
-      isProduction && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
     ].filter(Boolean),
   };
 };
