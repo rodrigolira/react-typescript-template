@@ -8,8 +8,6 @@ module.exports = (envVars) => {
   const isDevelopment = !isProduction;
   const isDevelopmentBuild = isDevelopment && envVars.WEBPACK_BUILD === true;
 
-  console.log(isDevelopmentBuild);
-
   return {
     entry: path.resolve(__dirname, './src/index.tsx'),
     resolve: {
@@ -19,7 +17,7 @@ module.exports = (envVars) => {
       path: path.resolve(__dirname, './build'),
       filename: isProduction ? 'static/js/[name].[contenthash:8].js' : 'static/js/[name].js',
       chunkFilename: isProduction ? 'static/js/[name].[contenthash:8].chunk.js' : 'static/js/[name].chunk.js',
-      assetModuleFilename: isProduction ? 'static/images/[name].[hash:8][ext]' : 'static/images/[name][ext]',
+      assetModuleFilename: isProduction ? 'static/images/[name].[contenthash:8][ext]' : 'static/images/[name][ext]',
       clean: true,
     },
     devtool: isProduction ? false : 'cheap-module-source-map',
@@ -48,6 +46,14 @@ module.exports = (envVars) => {
     module: {
       rules: [
         {
+          test: /\.(png|jpe?g|gif|svg)$/i,
+          type: 'asset',
+        },
+        {
+          test: /\.css$/,
+          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'].filter(Boolean),
+        },
+        {
           test: /\.(ts|js)x?$/,
           exclude: /node_modules/,
           use: [
@@ -55,10 +61,6 @@ module.exports = (envVars) => {
               loader: 'babel-loader',
             },
           ],
-        },
-        {
-          test: /\.css$/,
-          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'].filter(Boolean),
         },
       ],
     },
@@ -88,7 +90,7 @@ module.exports = (envVars) => {
             : {}
         )
       ),
-      isDevelopmentBuild && new ReactRefreshWebpackPlugin(),
+      isDevelopment && !isDevelopmentBuild && new ReactRefreshWebpackPlugin(),
       isProduction &&
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',
