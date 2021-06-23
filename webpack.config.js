@@ -51,9 +51,12 @@ module.exports = (envVars) => {
         },
         {
           test: /\.s?css$/,
-          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'].filter(
-            Boolean
-          ),
+          use: [
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+            'postcss-loader',
+            'sass-loader',
+          ].filter(Boolean),
         },
         {
           test: /\.(ts|js)x?$/,
