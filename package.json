@@ -1,11 +1,12 @@
 {
   "name": "react-typescript-template",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "React basic template for web apps with Typescript",
+  "main": "./src/index.tsx",
   "scripts": {
     "start": "webpack serve --mode=development",
-    "build": "webpack --mode=production",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build-dev": "cross-env NODE_ENV=development webpack",
     "lint-code": "tsc --noEmit && eslint .",
     "lint-code:fix": "tsc --noEmit && eslint --fix .",
     "lint-styles": "stylelint \"**/*.{css,scss,sass}\"",
@@ -22,10 +23,6 @@
   ],
   "author": "Rodrigo Lira",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rodrigolira/react-typescript-template/issues"
-  },
-  "homepage": "https://github.com/rodrigolira/react-typescript-template#readme",
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -43,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "babel-loader": "^8.2.2",
+    "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
     "eslint": "^7.29.0",
     "eslint-config-airbnb-typescript": "^12.3.1",

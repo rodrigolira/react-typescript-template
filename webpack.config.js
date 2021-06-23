@@ -3,17 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const PRODUCTION_MODE = 'production';
-const DEVELOPMENT_MODE = 'development';
-
-module.exports = (_, argv) => {
-  const { mode } = argv;
-
-  const isProduction = mode === PRODUCTION_MODE;
+module.exports = (envVars) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   const isDevelopment = !isProduction;
+  const isDevelopmentBuild = isDevelopment && envVars.WEBPACK_BUILD === true;
 
-  process.env.NODE_ENV = isProduction ? PRODUCTION_MODE : DEVELOPMENT_MODE;
-  process.env.BABEL_ENV = isProduction ? PRODUCTION_MODE : DEVELOPMENT_MODE;
+  console.log(isDevelopmentBuild);
 
   return {
     entry: path.resolve(__dirname, './src/index.tsx'),
@@ -24,6 +19,7 @@ module.exports = (_, argv) => {
       path: path.resolve(__dirname, './build'),
       filename: isProduction ? 'static/js/[name].[contenthash:8].js' : 'static/js/[name].js',
       chunkFilename: isProduction ? 'static/js/[name].[contenthash:8].chunk.js' : 'static/js/[name].chunk.js',
+      assetModuleFilename: isProduction ? 'static/images/[name].[hash:8][ext]' : 'static/images/[name][ext]',
       clean: true,
     },
     devtool: isProduction ? false : 'cheap-module-source-map',
@@ -89,10 +85,10 @@ module.exports = (_, argv) => {
                   minifyURLs: true,
                 },
               }
-            : undefined
+            : {}
         )
       ),
-      isDevelopment && new ReactRefreshWebpackPlugin(),
+      isDevelopmentBuild && new ReactRefreshWebpackPlugin(),
       isProduction &&
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',
