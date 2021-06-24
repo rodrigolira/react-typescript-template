@@ -4,13 +4,13 @@
   "description": "React basic template for web apps with Typescript",
   "main": "./src/index.tsx",
   "scripts": {
-    "start": "webpack serve --mode=development",
+    "start": "cross-env NODE_ENV=development webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
     "build-dev": "cross-env NODE_ENV=development webpack",
     "lint-code": "tsc --noEmit && eslint .",
     "lint-code:fix": "tsc --noEmit && eslint --fix .",
-    "lint-styles": "stylelint \"**/*.{css,scss,sass}\"",
-    "lint-styles:fix": "stylelint --fix \"**/*.{css,scss,sass}\""
+    "lint-styles": "stylelint \"src/**/*.{css,scss}\"",
+    "lint-styles:fix": "stylelint --fix \"src/**/*.{css,scss}\""
   },
   "repository": {
     "type": "git",

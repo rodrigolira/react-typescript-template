@@ -20,6 +20,7 @@ module.exports = (envVars) => {
       assetModuleFilename: isProduction ? 'static/images/[name].[contenthash:8][ext]' : 'static/images/[name][ext]',
       clean: true,
     },
+    mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? false : 'cheap-module-source-map',
     devServer: isProduction
       ? undefined
