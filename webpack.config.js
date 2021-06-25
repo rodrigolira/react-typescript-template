@@ -2,11 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = (envVars) => {
   const isProduction = process.env.NODE_ENV === 'production';
   const isDevelopment = !isProduction;
-  const isDevelopmentBuild = isDevelopment && envVars.WEBPACK_BUILD === true;
+  const isWebpackServe = envVars.WEBPACK_SERVE === true;
 
   return {
     entry: path.resolve(__dirname, './src/index.tsx'),
@@ -60,7 +62,7 @@ module.exports = (envVars) => {
           ].filter(Boolean),
         },
         {
-          test: /\.(ts|js)x?$/,
+          test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           use: [
             {
@@ -96,12 +98,23 @@ module.exports = (envVars) => {
             : {}
         )
       ),
-      isDevelopment && !isDevelopmentBuild && new ReactRefreshWebpackPlugin(),
+      isDevelopment && isWebpackServe && new webpack.HotModuleReplacementPlugin(),
+      isDevelopment && isWebpackServe && new ReactRefreshWebpackPlugin(),
       isProduction &&
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
         }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: '**/*',
+            context: path.resolve(__dirname, 'public'),
+            filter: (file) => file !== path.resolve(__dirname, './public/index.html').replace(/\\/g, '/'),
+            noErrorOnMissing: true,
+          },
+        ],
+      }),
     ].filter(Boolean),
   };
 };
