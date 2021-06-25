@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const webpack = require('webpack');
 
 module.exports = (envVars) => {
   const isProduction = process.env.NODE_ENV === 'production';
@@ -12,6 +11,7 @@ module.exports = (envVars) => {
 
   return {
     entry: path.resolve(__dirname, './src/index.tsx'),
+    target: isWebpackServe ? 'web' : 'browserslist',
     resolve: {
       extensions: ['.tsx', '.ts', '.jsx', '.js'],
     },
@@ -98,7 +98,6 @@ module.exports = (envVars) => {
             : {}
         )
       ),
-      isDevelopment && isWebpackServe && new webpack.HotModuleReplacementPlugin(),
       isDevelopment && isWebpackServe && new ReactRefreshWebpackPlugin(),
       isProduction &&
         new MiniCssExtractPlugin({
