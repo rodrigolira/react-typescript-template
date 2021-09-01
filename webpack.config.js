@@ -30,7 +30,9 @@ module.exports = (envVars) => {
           port: 3000,
           open: false,
           hot: true,
-          contentBase: path.resolve(__dirname, './public'),
+          static: {
+            directory: path.resolve(__dirname, 'public'),
+          },
         },
     optimization: {
       splitChunks: {
@@ -66,7 +68,10 @@ module.exports = (envVars) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: 'babel-loader',
+              loader: require.resolve('babel-loader'),
+              options: {
+                plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+              },
             },
           ],
         },
