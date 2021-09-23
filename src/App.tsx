@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles.css';
 
 const App = (): React.ReactElement => (
   <div>

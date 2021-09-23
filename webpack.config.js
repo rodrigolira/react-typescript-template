@@ -10,13 +10,14 @@ module.exports = (envVars) => {
   const isWebpackServe = envVars.WEBPACK_SERVE === true;
 
   return {
-    entry: path.resolve(__dirname, './src/index.tsx'),
+    entry: path.resolve(__dirname, 'src/index.tsx'),
     target: isWebpackServe ? 'web' : 'browserslist',
     resolve: {
       extensions: ['.tsx', '.ts', '.jsx', '.js'],
     },
     output: {
-      path: path.resolve(__dirname, './build'),
+      path: path.resolve(__dirname, 'build'),
+      publicPath: '/',
       filename: isProduction ? 'static/js/[name].[contenthash:8].js' : 'static/js/[name].js',
       chunkFilename: isProduction ? 'static/js/[name].[contenthash:8].chunk.js' : 'static/js/[name].chunk.js',
       assetModuleFilename: isProduction ? 'static/images/[name].[contenthash:8][ext]' : 'static/images/[name][ext]',
@@ -55,13 +56,10 @@ module.exports = (envVars) => {
           type: 'asset',
         },
         {
-          test: /\.s?css$/,
-          use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-            'css-loader',
-            'postcss-loader',
-            'sass-loader',
-          ].filter(Boolean),
+          test: /\.css$/,
+          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'postcss-loader'].filter(
+            Boolean
+          ),
         },
         {
           test: /\.[jt]sx?$/,
@@ -70,7 +68,7 @@ module.exports = (envVars) => {
             {
               loader: require.resolve('babel-loader'),
               options: {
-                plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+                plugins: [isDevelopment && isWebpackServe && require.resolve('react-refresh/babel')].filter(Boolean),
               },
             },
           ],
@@ -82,7 +80,7 @@ module.exports = (envVars) => {
         Object.assign(
           {},
           {
-            template: path.resolve(__dirname, './public/index.html'),
+            template: path.resolve(__dirname, 'public/index.html'),
             inject: 'body',
           },
           isProduction
@@ -114,7 +112,7 @@ module.exports = (envVars) => {
           {
             from: '**/*',
             context: path.resolve(__dirname, 'public'),
-            filter: (file) => file !== path.resolve(__dirname, './public/index.html').replace(/\\/g, '/'),
+            filter: (file) => file !== path.resolve(__dirname, 'public/index.html').replace(/\\/g, '/'),
             noErrorOnMissing: true,
           },
         ],
