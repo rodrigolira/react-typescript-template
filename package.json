@@ -7,10 +7,10 @@
     "start": "cross-env NODE_ENV=development webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
-    "lint-code": "tsc --noEmit && eslint .",
-    "lint-code:fix": "tsc --noEmit && eslint --fix .",
-    "lint-styles": "stylelint \"src/**/*.{css,scss}\"",
-    "lint-styles:fix": "stylelint --fix \"src/**/*.{css,scss}\""
+    "lint-code": "tsc --noEmit && eslint . && prettier --check .",
+    "lint-code:fix": "tsc --noEmit && eslint --fix . && prettier --write .",
+    "lint-styles": "stylelint ./src ./public",
+    "lint-styles:fix": "stylelint --fix ./src ./public"
   },
   "repository": {
     "type": "git",
@@ -44,6 +44,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.3.0",
     "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",

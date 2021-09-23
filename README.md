@@ -20,16 +20,16 @@ Optionally, if you want to use TailwindCss in your project, run this command ins
 
 ## Features
 
-* Webpack 5
-	* webpack-dev-server
-	* react-refresh
-	* Css and Scss support
-	* PostCss
-	* Image assets (`*.png`, `*.jpg`, `*.jpeg`, `*.gif` and `*.svg`)
-* Babel 7
-* React
-* Typescript
-* TailwindCss (optional)
-* ESLint (configured with AirBnb's style)
-* Prettier
-* Stylelint
+- Webpack 5
+  - webpack-dev-server
+  - react-refresh
+  - Css and Scss support
+  - PostCss
+  - Image assets (`*.png`, `*.jpg`, `*.jpeg`, `*.gif` and `*.svg`)
+- Babel 7
+- React
+- Typescript
+- TailwindCss (optional)
+- ESLint (configured with AirBnb's style)
+- Prettier
+- Stylelint
