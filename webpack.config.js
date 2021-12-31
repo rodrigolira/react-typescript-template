@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = (envVars) => {
   const isProduction = process.env.NODE_ENV === 'production';
@@ -36,6 +37,7 @@ module.exports = (envVars) => {
           },
         },
     optimization: {
+      minimizer: [`...`, new CssMinimizerPlugin()],
       splitChunks: {
         cacheGroups: {
           commons: {
